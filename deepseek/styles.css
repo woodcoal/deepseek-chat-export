@@ -1,0 +1,67 @@
+#DS_MarkdownExport-container {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 2147483647 !important;
+    display: flex !important;
+    gap: 8px !important;
+}
+
+#DS_MarkdownExport, #DS_MarkdownExport-copy {
+    padding: 4px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    opacity: 0.3 !important;
+    background: none !important;
+    border: none !important;
+    font-size: 20px !important;
+    position: relative !important;
+}
+
+#DS_MarkdownExport:hover, #DS_MarkdownExport-copy:hover {
+    opacity: 1 !important;
+    transform: scale(1.1) !important;
+}
+
+#DS_MarkdownExport:hover::after, #DS_MarkdownExport-copy:hover::after {
+    content: attr(title) !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    background: rgba(0, 0, 0, 0.8) !important;
+    color: white !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    z-index: 1000 !important;
+}
+
+.ds-toast {
+    position: fixed !important;
+    top: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    color: white !important;
+    padding: 8px 16px !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+    z-index: 2147483647 !important;
+    animation: toast-in-out 2s ease !important;
+}
+
+.ds-toast.error {
+    background: rgba(255, 0, 0, 0.8) !important;
+}
+
+.ds-toast.success {
+    background: rgba(0, 100, 255, 0.8) !important;
+}
+
+@keyframes toast-in-out {
+    0% { opacity: 0; transform: translate(-50%, -20px); }
+    20% { opacity: 1; transform: translate(-50%, 0); }
+    80% { opacity: 1; transform: translate(-50%, 0); }
+    100% { opacity: 0; transform: translate(-50%, 20px); }
+}
