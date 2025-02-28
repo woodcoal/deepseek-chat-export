@@ -1,5 +1,5 @@
 (function () {
-	'use strict';
+	('use strict');
 	const BUTTON_ID = 'DS_MarkdownExport';
 	let isProcessing = false;
 
@@ -14,6 +14,16 @@
 
 	function createUI() {
 		if (document.getElementById(BUTTON_ID)) return;
+
+		// 检查当前是否为首页
+		if (isHomePage()) {
+			// 如果是首页，移除已存在的按钮
+			const existingContainer = document.getElementById(`${BUTTON_ID}-container`);
+			if (existingContainer) {
+				existingContainer.remove();
+			}
+			return;
+		}
 
 		const container = document.createElement('div');
 		container.id = `${BUTTON_ID}-container`;
@@ -32,6 +42,21 @@
 
 		container.append(copyBtn, exportBtn);
 		document.body.append(container);
+	}
+
+	// 添加判断是否为首页的函数
+	function isHomePage() {
+		// 检查URL是否为首页
+		if (
+			window.location.pathname === '/' ||
+			window.location.href === 'https://chat.deepseek.com/'
+		) {
+			return true;
+		}
+
+		// 检查是否存在对话内容元素
+		const hasConversation = !!document.querySelector(`.${SELECTORS.MESSAGE}`);
+		return !hasConversation;
 	}
 
 	async function handleExport(mode) {
@@ -139,13 +164,13 @@
 			if (conv.type === 'user') {
 				if (idx > 0) md += '\n---\n';
 				let ask = conv.content.split('\n').join('\n> ');
-				md += `\n> [! 💬 提问]\n> ${ask}\n\n`;
+				md += `\n> [!info] 提问\n> ${ask}\n\n`;
 			}
 
 			if (conv.type === 'ai' && conv.content) {
 				if (conv.content.thinking) {
 					let thinking = conv.content.thinking.split('\n').join('\n> ');
-					md += `**🤔 思考**\n> ${thinking}\n`;
+					md += `\n> [!success] 思考\n${thinking}\n`;
 				}
 
 				if (conv.content.response) {
@@ -247,8 +272,40 @@
 		});
 	}
 
+	// 添加 URL 变化监听
+	function setupUrlChangeListener() {
+		let lastUrl = window.location.href;
+
+		// 监听 URL 变化
+		setInterval(() => {
+			if (lastUrl !== window.location.href) {
+				lastUrl = window.location.href;
+				const existingContainer = document.getElementById(`${BUTTON_ID}-container`);
+				if (existingContainer) {
+					existingContainer.remove();
+				}
+				createUI();
+			}
+		}, 1000);
+
+		// 监听 history 变化
+		const pushState = history.pushState;
+		history.pushState = function () {
+			pushState.apply(history, arguments);
+			const existingContainer = document.getElementById(`${BUTTON_ID}-container`);
+			if (existingContainer) {
+				existingContainer.remove();
+			}
+			createUI();
+		};
+	}
+
 	const observer = new MutationObserver(() => createUI());
 	observer.observe(document, { childList: true, subtree: true });
-	window.addEventListener('load', createUI);
-	setInterval(createUI, 3000);
+	// window.addEventListener('load', createUI);
+	// setInterval(createUI, 3000);
+	window.addEventListener('load', () => {
+		createUI();
+		setupUrlChangeListener();
+	});
 })();
