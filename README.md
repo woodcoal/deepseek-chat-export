@@ -1,4 +1,4 @@
-![[screenshot.jpg]]
+![](https://raw.githubusercontent.com/woodcoal/deepseek-chat-export/refs/heads/main/screenshot.jpg)
 
 # DeepSeek Chat 对话导出
 
