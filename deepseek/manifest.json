@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "DeepSeek Chat Export",
-	"version": "1.25.0228",
+	"version": "1.25.0305",
 	"description": "将 Deepseek 对话导出与复制的工具",
 	"permissions": ["clipboardWrite", "downloads"],
 	"action": {
