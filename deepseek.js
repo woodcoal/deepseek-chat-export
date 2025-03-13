@@ -2,8 +2,9 @@
 // @name         DeepSeek 对话导出
 // @name:en      DeepSeek Chat Export
 // @namespace    http://tampermonkey.net/
-// @version      1.25.0305
+// @version      1.25.0313
 // @description  将 Deepseek 对话导出与复制的工具
+// @description:en  The tool for exporting and copying dialogues in Deepseek
 // @author       木炭
 // @copyright	 © 2025 木炭
 // @license      MIT
@@ -281,7 +282,7 @@
 			const lang =
 				codeBlock.querySelector('.md-code-block-infostring')?.textContent?.trim() || '';
 			const codeContent = codeBlock.querySelector('pre')?.textContent || '';
-			codeBlock.replaceWith(`\n\n\`\`\`${lang}\n${codeContent}\n\`\`\`\n\n`);
+			codeBlock.replaceWith(`[_code_:]${lang}\n${codeContent}[:_code_]`);
 		});
 
 		// 预处理数学公式
@@ -295,6 +296,8 @@
 		return Array.from(tempDiv.childNodes)
 			.map((node) => convertNodeToMarkdown(node))
 			.join('')
+			.replace(/\[_code_\:\]/g, '\n```')
+			.replace(/\[\:_code_\]/g, '\n```\n')
 			.trim();
 	}
 
@@ -325,7 +328,7 @@
 			},
 			UL: (n) => processListItems(n, level, '-'),
 			OL: (n) => processListItems(n, level, null, n.getAttribute('start') || 1),
-			PRE: (n) => `\n\`\`\`\n${n.textContent.trim()}\n\`\`\`\n\n`,
+			PRE: (n) => `[_code_:]${n.textContent.trim()}[:_code_]`,
 			CODE: (n) => `\`${n.textContent.trim()}\``,
 			H1: (n) => `# ${processInlineElements(n)}\n`,
 			H2: (n) => `## ${processInlineElements(n)}\n`,
